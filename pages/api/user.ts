@@ -7,5 +7,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   })
 
   const result = await octokit.request(`/users/${req.query.q}`)
-  console.log(result);
 }
