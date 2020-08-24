@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import debounce from 'lodash.debounce';
 
-const DEFAULT_DEBOUNCE_TIMEOUT = 1000;
+const DEFAULT_DEBOUNCE_TIMEOUT = 500;
 
 /**
  * Debounce fast changing value.

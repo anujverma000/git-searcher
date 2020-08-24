@@ -13,6 +13,7 @@
     "@emotion/styled": "^10.0.27",
     "@octokit/rest": "^18.0.3",
     "emotion-theming": "^10.0.27",
+    "javascript-time-ago": "^2.0.13",
     "lodash.debounce": "^4.0.8",
     "next": "9.5.1",
     "nprogress": "^0.2.0",

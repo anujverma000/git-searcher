@@ -46,7 +46,6 @@ const Home: NextPage<SearchProps> = () => {
   return (
     <>
       <Search {...searchState} />
-      <UserCard/>
     </>
   )
 }
