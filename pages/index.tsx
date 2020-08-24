@@ -1,24 +1,23 @@
-import { NextPage, NextPageContext } from 'next';
-import { useSelector, useDispatch } from 'react-redux'
-import { initializeStore } from '../store'
-import Search from '../components/Search';
-import UserCard from '../components/UserCard';
+import { NextPage, NextPageContext } from "next";
+import { useSelector, useDispatch } from "react-redux";
+import { initializeStore } from "../store";
+import Search from "../components/Search";
 
 interface SearchProps {
-  searchType: string,
-  searchQuery: string,
-  users: [],
-  repositories: [],
-  issues: []
+  searchType: string;
+  searchQuery: string;
+  users: [];
+  repositories: [];
+  issues: [];
 }
 
 const initialState: SearchProps = {
-  searchType: 'users',
-  searchQuery: '',
+  searchType: "users",
+  searchQuery: "",
   users: [],
   repositories: [],
-  issues: []
-}
+  issues: [],
+};
 
 const useSearchState = () => {
   const searchType = useSelector((state: SearchProps) => state.searchType);
@@ -28,33 +27,33 @@ const useSearchState = () => {
 
   const saveSearchQuery = (query: string) =>
     dispatch({
-      type: 'searchQuery', 
-      searchQuery: query
-    })
+      type: "searchQuery",
+      searchQuery: query,
+    });
 
   const saveSearchType = (type: string) =>
     dispatch({
-      type: 'searchType', 
-      searchType: type
-    })
+      type: "searchType",
+      searchType: type,
+    });
 
-  return { searchType, searchQuery, saveSearchQuery, saveSearchType }
-}
+  return { searchType, searchQuery, saveSearchQuery, saveSearchType };
+};
 
 const Home: NextPage<SearchProps> = () => {
-  const searchState = useSearchState()
+  const searchState = useSearchState();
   return (
     <>
       <Search {...searchState} />
     </>
-  )
-}
+  );
+};
 
 export async function getStaticProps(context: NextPageContext) {
-  initializeStore(initialState)
+  initializeStore(initialState);
   return {
     props: initialState,
-  }
+  };
 }
 
 export default Home;

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import debounce from 'lodash.debounce';
+import { useState, useEffect } from "react";
+import debounce from "lodash.debounce";
 
 const DEFAULT_DEBOUNCE_TIMEOUT = 500;
 
@@ -7,17 +7,11 @@ const DEFAULT_DEBOUNCE_TIMEOUT = 500;
  * Debounce fast changing value.
  * The debounced value will only reflect the latest value when the hook has not been called for the specified time period.
  */
-function useDebounce(
-  value: any,
-  wait: number = DEFAULT_DEBOUNCE_TIMEOUT,
-) {
+const useDebounce = (value: any, wait: number = DEFAULT_DEBOUNCE_TIMEOUT) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
-    const debouncedFn = debounce(
-      () => setDebouncedValue(value),
-      wait,
-    );
+    const debouncedFn = debounce(() => setDebouncedValue(value), wait);
 
     debouncedFn();
 
@@ -29,6 +23,6 @@ function useDebounce(
   }, [value, wait]); // Only re-call effect if value or delay changes
 
   return debouncedValue;
-}
+};
 
 export default useDebounce;

@@ -1,9 +1,9 @@
-import { AppProps } from 'next/app'
-import { ThemeProvider, CSSReset } from '@chakra-ui/core';
-import { Provider } from 'react-redux';
-import { persistStore } from 'redux-persist';
-import { PersistGate } from 'redux-persist/integration/react';
-import { useStore } from '../store';
+import { AppProps } from "next/app";
+import { ThemeProvider, CSSReset } from "@chakra-ui/core";
+import { Provider } from "react-redux";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import { useStore } from "../store";
 
 function App({ Component, pageProps }: AppProps) {
   const store = useStore(pageProps.initialReduxState);
@@ -17,7 +17,7 @@ function App({ Component, pageProps }: AppProps) {
         </ThemeProvider>
       </PersistGate>
     </Provider>
-  )
+  );
 }
 
-export default App
+export default App;
