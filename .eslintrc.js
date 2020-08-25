@@ -1,44 +1,47 @@
 module.exports = {
+  root: true,
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaFeatures: { jsx: true },
+  },
   env: {
     browser: true,
     node: true,
-    es2020: true,
   },
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaVersion: 2020,
-    sourceType: "module",
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
-  plugins: ["@typescript-eslint", "react", "prettier"],
   extends: [
-    "airbnb",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript",
-    "prettier",
+    "plugin:jsx-a11y/recommended",
+    // Prettier plugin and recommended rules
     "prettier/@typescript-eslint",
-    "prettier/react",
+    "plugin:prettier/recommended",
   ],
   rules: {
-    "react/react-in-jsx-scope": "off",
+    // Include .prettierrc.js rules
+    "prettier/prettier": ["error", {}, { usePrettierrc: true }],
+    "react/prop-types": "off",
     "react/no-children-prop": "off",
-    camelcase: "off",
-    "react/jsx-filename-extension": [1, { extensions: [".ts", ".tsx"] }],
-    "import/extensions": 0,
-    "react/prop-types": 0,
-    "react/jsx-props-no-spreading": ["error", { custom: "ignore" }],
-    "prettier/prettier": "error",
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        labelComponents: [],
+        labelAttributes: [],
+        controlComponents: [],
+        assert: "either",
+        depth: 25,
+      },
+    ],
+    "@typescript-eslint/no-explicit-any": "off",
   },
   settings: {
-    "import/resolver": {
-      node: {
-        paths: ["~"],
-      },
+    react: {
+      version: "detect",
     },
   },
 };

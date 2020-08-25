@@ -25,7 +25,7 @@ const UserCard: React.FC<User> = (user: User) => {
         </Box>
         <Box flexGrow={1}>
           <Link href={user.url} isExternal color="#0366d6">
-            <Text fontSize="md" ml={2} fontWeight="semibold">
+            <Text fontSize={["sm", "md"]} ml={2} fontWeight="semibold">
               {user.name}
             </Text>
           </Link>

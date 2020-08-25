@@ -132,7 +132,7 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
     if (searchType === "repositories") {
       return (
         <Grid
-          w="70%"
+          w={["95%", "70%"]}
           mx="auto"
           my={20}
           templateColumns="repeat(auto-fit, minmax(320px, 1fr))"
@@ -147,7 +147,7 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
     if (searchType === "users") {
       return (
         <Grid
-          w="70%"
+          w={["95%", "70%"]}
           mx="auto"
           my={20}
           templateColumns="repeat(auto-fit, minmax(320px, 1fr))"
@@ -161,7 +161,7 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
     }
     if (searchType === "issues") {
       return (
-        <Grid w="70%" mx="auto" my={20} templateColumns="1fr">
+        <Grid w={["95%", "70%"]} mx="auto" my={20}>
           {results?.map((issue: Issue) => (
             <IssueCard key={issue.id} {...issue} />
           ))}

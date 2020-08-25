@@ -16,22 +16,24 @@ import {
 import { GoMarkGithub } from "react-icons/go";
 import { MdArrowDropDown } from "react-icons/md";
 
-const SearchBox = ({
-  query,
-  handleQueryChange,
-  type,
-  handleTypeChange,
-  loading,
-}) => {
+type SearchBoxType = {
+  query: string;
+  handleQueryChange: (query: string) => void;
+  type: string;
+  handleTypeChange: (query: string) => void;
+  loading: boolean;
+};
+
+const SearchBox: React.FC<SearchBoxType> = (searchState: SearchBoxType) => {
   return (
-    <Box w="500px" mx="auto" mt={20}>
-      <Flex align="top" mt={2}>
+    <Box w="100%" maxW="500px" mx="auto" px={2}>
+      <Flex align="top" mt={[6, 2]}>
         <GoMarkGithub size="52px" />
         <Box ml={4}>
           <Text fontSize="xl" fontWeight="bold">
             Github Searcher
           </Text>
-          <Text fontSize="md" color="gray.500">
+          <Text fontSize={["sm", "md"]} color="gray.500">
             Search users, repositories or issues below
           </Text>
         </Box>
@@ -40,18 +42,23 @@ const SearchBox = ({
         <InputGroup flex={2}>
           <Input
             placeholder="Start typing to search .."
-            value={query}
-            onChange={({ target }) => handleQueryChange(target.value)}
+            value={searchState.query}
+            onChange={({ target }) =>
+              searchState.handleQueryChange(target.value)
+            }
           />
-          {loading && <InputRightElement children={<Spinner size="sm" />} />}
+          {searchState.loading && (
+            <InputRightElement children={<Spinner size="sm" />} />
+          )}
         </InputGroup>
         <Select
-          flex={1}
+          flex={[2, 1]}
           icon={MdArrowDropDown}
-          ml={4}
+          ml={2}
           iconSize={8}
-          value={type}
-          onChange={({ target }) => handleTypeChange(target.value)}
+          value={searchState.type}
+          fontSize={["sm", "md"]}
+          onChange={({ target }) => searchState.handleTypeChange(target.value)}
         >
           <option value="users">Users</option>
           <option value="repositories">Repositories</option>

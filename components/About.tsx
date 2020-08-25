@@ -19,7 +19,15 @@ import {
   Box,
 } from "@chakra-ui/core";
 
-const About = ({ isOpen, onClose }) => {
+/**
+ * DrawerType for handing the drawer onpen state and onClose handler
+ */
+type DrawerType = {
+  onClose: () => void;
+  isOpen: boolean;
+};
+
+const About = ({ isOpen, onClose }: DrawerType) => {
   return (
     <>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="lg">

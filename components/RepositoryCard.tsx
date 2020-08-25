@@ -27,15 +27,15 @@ const RepositoryCard: React.FC<Repository> = (repo: Repository) => {
           <GoRepo size="16px" />
         </PseudoBox>
         <Link href={repo.url} isExternal color="#0366d6">
-          <Text fontSize="md" ml={2} fontWeight="semibold">
+          <Text fontSize={["sm", "md"]} ml={2} fontWeight="semibold">
             {repo.name}
           </Text>
         </Link>
       </Flex>
       <Text fontSize="xs" color="gray.500">
-        Updated at {timeAgo.format(Date.parse(repo?.updated_at))}
+        Updated: {timeAgo.format(Date.parse(repo?.updated_at))}
       </Text>
-      <Text fontSize="sm" mt={2}>
+      <Text fontSize="sm" mt={2} isTruncated>
         {repo.description}
       </Text>
       <Flex align="center" mt={2} color="gray.500">
