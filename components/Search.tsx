@@ -1,132 +1,182 @@
+/**
+ * Search Component renders the search box and resutls
+ */
+
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  Flex,
-  Box,
-  Text,
-  Input,
-  Select,
-  Grid,
-  Spinner,
-  InputGroup,
-  InputRightElement,
-  Stack,
-} from "@chakra-ui/core";
-import { GoMarkGithub } from "react-icons/go";
-import { MdArrowDropDown } from "react-icons/md";
+import { Grid, Stack } from "@chakra-ui/core";
 import useDebounce from "../lib/useDebounce";
 import RepositoryCard from "./RepositoryCard";
-import parseRepositories from "../lib/parseJsonToType";
-import Repository from "../@types/Repository";
-
-interface SearchState {
-  searchType: string;
-  searchQuery: string;
-  saveSearchQuery: (query: string) => void;
-  saveSearchType: (type: string) => void;
-}
-const useSearch = () => {
-  const cachedResults = useSelector((state) => state);
-
-  const dispatch = useDispatch();
-
-  const search = (type: string, query: string, results) =>
-    dispatch({
-      type,
-      query,
-      results,
-    });
-  return { search, cachedResults };
-};
+import UserCard from "./UserCard";
+import IssueCard from "./IssueCard";
+import { parseRepositories, parseUsers, parseIssues } from "../lib/parseTypes";
+import { Repository, User, Issue, Result } from "../@types/ResultTypes";
+import SearchState from "../@types/SearchState";
+import useSearch from "../lib/useSearch";
+import SearchBox from "./SearchBox";
 
 const Search: React.FC<SearchState> = (searchState: SearchState) => {
-  const [query, setQuery] = useState(searchState.searchQuery);
-  const [type, setType] = useState(searchState.searchType);
-  const [loading, setLoading] = useState(false);
+  /**
+   * Debounce Time out
+   */
+  const DEFAULT_DEBOUNCE_TIMEOUT = 500;
+  /**
+   * For controlled Input of the search query string
+   */
+  const [query, setQuery] = useState<string>(searchState.searchQuery);
 
-  const [results, setResults] = useState([]);
+  /**
+   * For controlled Input of the search type
+   */
+  const [type, setType] = useState<string>(searchState.searchType);
 
-  const debouncedQuery = useDebounce(query);
-  const debouncedType = useDebounce(type);
+  /**
+   * Use debounce for the search query
+   */
+  const debouncedQuery = useDebounce<string>(query, DEFAULT_DEBOUNCE_TIMEOUT);
 
+  /**
+   * Use debounce for the search type as well
+   */
+  const debouncedType = useDebounce<string>(type, DEFAULT_DEBOUNCE_TIMEOUT);
+
+  /**
+   * Use to show loading for new search keywords
+   */
+  const [loading, setLoading] = useState<boolean>(false);
+
+  /**
+   * Holds the results of the search
+   */
+  const [results, setResults] = useState<Result[]>([]);
+
+  /**
+   * Set the query of the controllerd input and
+   * save the query in persitent store
+   */
   const handleQueryChange = (queryString: string) => {
     setQuery(queryString);
     searchState.saveSearchQuery(queryString);
   };
 
+  /**
+   * Set the search type of the controllerd input and
+   * save the type in persitent store as well
+   */
   const handleTypeChange = (searchType: string) => {
     setType(searchType);
     searchState.saveSearchType(searchType);
   };
-  const { cachedResults, search } = useSearch();
+
+  /**
+   * Hook to get the cached results from persistent stroe and
+   * a handler to save the results for the new searches.
+   */
+  const { cachedResults, saveSearch } = useSearch();
+
+  /**
+   * Parse the results based on the type of search
+   * Also parsed results are saved in persistent store, not all the big jsons github returns
+   */
+  const parseResults = (searchType: string, items): Result[] => {
+    let parsedresults: Result[];
+
+    if (searchType === "repositories") {
+      parsedresults = parseRepositories(items);
+    }
+    if (searchType === "users") {
+      parsedresults = parseUsers(items);
+    }
+    if (searchType === "issues") {
+      parsedresults = parseIssues(items);
+    }
+    return parsedresults;
+  };
+
+  /**
+   * Look for debouncedQuery, debouncedType change events and
+   * Update results either from persitent cache or API hit.
+   */
   useEffect(() => {
-    setResults([]);
+    /* Get the cahched Type */
     const cachedType = cachedResults[debouncedType];
+
+    /* Get the cahched results based on the type changed */
     const cached = cachedType && cachedType[debouncedQuery];
+
+    /* Set the new results when type is changed or query is updated */
     if (cached) {
       setResults(cached);
     } else if (debouncedQuery?.length >= 3) {
+      /* Set the loading and hit the api */
       setLoading(true);
       fetch(`/api/search?t=${debouncedType}&q=${debouncedQuery}`)
         .then((res) => res.json())
         .then(({ items }) => {
-          setResults(items);
-          search(debouncedType, debouncedQuery, items);
+          /* Get the parsed results, save them in persistent store and set loading off */
+          const parsedResults = parseResults(debouncedType, items);
+          setResults(parsedResults);
+          saveSearch(debouncedType, debouncedQuery, parsedResults);
           setLoading(false);
         });
     } else if (debouncedQuery?.length === 0) {
+      /* If query is empty clear the results */
       setResults([]);
     }
   }, [debouncedQuery, debouncedType]);
 
-  const renderRepos = () => {
-    const repos: Repository[] = parseRepositories(results);
-    return repos?.map((repo: Repository) => (
-      <RepositoryCard key={repo.id} {...repo} />
-    ));
-  };
-  return (
-    <Stack direction="column" justify="center">
-      <Box maxW="500px" mx="auto">
-        <Flex align="top" mt={2}>
-          <GoMarkGithub size="52px" />
-          <Box ml={4}>
-            <Text fontSize="xl" fontWeight="bold">
-              Github Searcher
-            </Text>
-            <Text fontSize="md" color="gray.500">
-              Search users, repositories or issues below
-            </Text>
-          </Box>
-        </Flex>
-        <Flex mt={2}>
-          <InputGroup flex={2}>
-            <Input
-              placeholder="Start typing to search .."
-              value={query}
-              onChange={({ target }) => handleQueryChange(target.value)}
-            />
-            {loading && <InputRightElement children={<Spinner size="sm" />} />}
-          </InputGroup>
-          <Select
-            flex={1}
-            icon={MdArrowDropDown}
-            ml={4}
-            iconSize={8}
-            value={type}
-            onChange={({ target }) => handleTypeChange(target.value)}
-          >
-            <option value="users">Users</option>
-            <option value="repositories">Repositories</option>
-            <option value="issues">Issues</option>
-          </Select>
-        </Flex>
-      </Box>
-      <Box maxW="900px" mx="auto" mt={4}>
-        <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-          {renderRepos()}
+  /**
+   * Renders the search results based on type selected
+   * This helps us to render different UI formats for different types as well
+   */
+  const renderResults = (searchType: string) => {
+    if (searchType === "repositories") {
+      return (
+        <Grid
+          w="70%"
+          mx="auto"
+          my={20}
+          templateColumns="repeat(auto-fit, minmax(320px, 1fr))"
+          gap={4}
+        >
+          {results?.map((repo: Repository) => (
+            <RepositoryCard key={repo.id} {...repo} />
+          ))}
         </Grid>
-      </Box>
+      );
+    }
+    if (searchType === "users") {
+      return (
+        <Grid
+          w="70%"
+          mx="auto"
+          my={20}
+          templateColumns="repeat(auto-fit, minmax(320px, 1fr))"
+          gap={4}
+        >
+          {results?.map((user: User) => (
+            <UserCard key={user.id} {...user} />
+          ))}
+        </Grid>
+      );
+    }
+    if (searchType === "issues") {
+      return (
+        <Grid w="70%" mx="auto" my={20} templateColumns="1fr">
+          {results?.map((issue: Issue) => (
+            <IssueCard key={issue.id} {...issue} />
+          ))}
+        </Grid>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <Stack direction="column" justify="center" minH="85vh">
+      <SearchBox
+        {...{ query, type, handleQueryChange, handleTypeChange, loading }}
+      />
+      {renderResults(debouncedType)}
     </Stack>
   );
 };

@@ -1,11 +1,18 @@
+/**
+ * Component for rendering resositories from search results
+ */
+
 import { Flex, Text, Link, PseudoBox } from "@chakra-ui/core";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import { GoRepo, GoStar } from "react-icons/go";
 import numberFormatter from "../lib/numberFormatter";
-import Repository from "../@types/Repository";
+import { Repository } from "../@types/ResultTypes";
 
 const RepositoryCard: React.FC<Repository> = (repo: Repository) => {
+  /**
+   * Used to parse string time to time ago format
+   */
   TimeAgo.addLocale(en);
   const timeAgo = new TimeAgo("en-US");
   return (
@@ -15,8 +22,10 @@ const RepositoryCard: React.FC<Repository> = (repo: Repository) => {
       rounded="lg"
       _hover={{ borderColor: "gray.400" }}
     >
-      <Flex align="center">
-        <GoRepo />
+      <Flex align="flex-start">
+        <PseudoBox mt={1}>
+          <GoRepo size="16px" />
+        </PseudoBox>
         <Link href={repo.url} isExternal color="#0366d6">
           <Text fontSize="md" ml={2} fontWeight="semibold">
             {repo.name}
@@ -24,7 +33,7 @@ const RepositoryCard: React.FC<Repository> = (repo: Repository) => {
         </Link>
       </Flex>
       <Text fontSize="xs" color="gray.500">
-        Updated {timeAgo.format(Date.parse(repo?.updated_at))}
+        Updated at {timeAgo.format(Date.parse(repo?.updated_at))}
       </Text>
       <Text fontSize="sm" mt={2}>
         {repo.description}

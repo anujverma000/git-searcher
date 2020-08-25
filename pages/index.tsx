@@ -1,24 +1,35 @@
-import { NextPage, NextPageContext } from "next";
+import { NextPage, GetStaticProps } from "next";
 import { useSelector, useDispatch } from "react-redux";
+import { Repository, User, Issue } from "../@types/ResultTypes";
 import { initializeStore } from "../store";
 import Search from "../components/Search";
+import Footer from "../components/Footer";
 
+/**
+ * Interface for SearchProps to Home page
+ */
 interface SearchProps {
   searchType: string;
   searchQuery: string;
-  users: [];
-  repositories: [];
-  issues: [];
+  users: User[];
+  repositories: Repository[];
+  issues: Issue[];
 }
 
+/**
+ * Initial state for the app
+ */
 const initialState: SearchProps = {
   searchType: "users",
   searchQuery: "",
-  users: [],
-  repositories: [],
-  issues: [],
+  users: new Array<User>(),
+  repositories: new Array<Repository>(),
+  issues: new Array<Issue>(),
 };
 
+/**
+ * Custom hook to access, save and persist app's state.
+ */
 const useSearchState = () => {
   const searchType = useSelector((state: SearchProps) => state.searchType);
   const searchQuery = useSelector((state: SearchProps) => state.searchQuery);
@@ -45,15 +56,16 @@ const Home: NextPage<SearchProps> = () => {
   return (
     <>
       <Search {...searchState} />
+      <Footer />
     </>
   );
 };
 
-export async function getStaticProps(context: NextPageContext) {
+export const getStaticProps: GetStaticProps = async () => {
   initializeStore(initialState);
   return {
     props: initialState,
   };
-}
+};
 
 export default Home;

@@ -5,8 +5,11 @@ import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import { useStore } from "../store";
 
-function App({ Component, pageProps }: AppProps) {
+const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
+  // App Store from the initialSTate
   const store = useStore(pageProps.initialReduxState);
+
+  // Persistor action for the persistent store
   const persistor = persistStore(store);
   return (
     <Provider store={store}>
@@ -18,6 +21,6 @@ function App({ Component, pageProps }: AppProps) {
       </PersistGate>
     </Provider>
   );
-}
+};
 
 export default App;
