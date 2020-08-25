@@ -3,7 +3,7 @@
  */
 
 import { useState, useEffect } from "react";
-import { Grid, Stack } from "@chakra-ui/core";
+import { Grid, Stack, useToast } from "@chakra-ui/core";
 import useDebounce from "../lib/useDebounce";
 import RepositoryCard from "./RepositoryCard";
 import UserCard from "./UserCard";
@@ -50,6 +50,11 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
   const [results, setResults] = useState<Result[]>([]);
 
   /**
+   * UI hook to show the toast message when server request fails.
+   */
+  const toast = useToast();
+
+  /**
    * Set the query of the controllerd input and
    * save the query in persitent store
    */
@@ -93,6 +98,39 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
   };
 
   /**
+   * Handles the API request with backend and sets the result on store.
+   */
+  const handleSearchRequest = () => {
+    fetch(
+      `/api/search?t=${encodeURI(debouncedType)}&q=${encodeURI(debouncedQuery)}`
+    )
+      .then((res) => {
+        if (!res.ok) {
+          throw Error(res.statusText);
+        }
+        return res.json();
+      })
+      .then(({ items }) => {
+        /* Get the parsed results, save them in persistent store and set loading off */
+        const parsedResults = parseResults(debouncedType, items);
+        setResults(parsedResults);
+        saveSearch(debouncedType, debouncedQuery, parsedResults);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast({
+          title: "An error occurred.",
+          description: error.message,
+          position: "top",
+          status: "error",
+          duration: 10000,
+          isClosable: true,
+        });
+      });
+  };
+
+  /**
    * Look for debouncedQuery, debouncedType change events and
    * Update results either from persitent cache or API hit.
    */
@@ -109,15 +147,7 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
     } else if (debouncedQuery?.length >= 3) {
       /* Set the loading and hit the api */
       setLoading(true);
-      fetch(`/api/search?t=${debouncedType}&q=${debouncedQuery}`)
-        .then((res) => res.json())
-        .then(({ items }) => {
-          /* Get the parsed results, save them in persistent store and set loading off */
-          const parsedResults = parseResults(debouncedType, items);
-          setResults(parsedResults);
-          saveSearch(debouncedType, debouncedQuery, parsedResults);
-          setLoading(false);
-        });
+      handleSearchRequest();
     } else if (debouncedQuery?.length === 0) {
       /* If query is empty clear the results */
       setResults([]);
@@ -135,7 +165,7 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
           w={["95%", "70%"]}
           mx="auto"
           my={20}
-          templateColumns="repeat(auto-fit, minmax(320px, 1fr))"
+          templateColumns="repeat(auto-fill, minmax(320px, 1fr))"
           gap={4}
         >
           {results?.map((repo: Repository) => (
@@ -150,7 +180,7 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
           w={["95%", "70%"]}
           mx="auto"
           my={20}
-          templateColumns="repeat(auto-fit, minmax(320px, 1fr))"
+          templateColumns="repeat(auto-fill, minmax(320px, 1fr))"
           gap={4}
         >
           {results?.map((user: User) => (
