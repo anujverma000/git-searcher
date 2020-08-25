@@ -33,8 +33,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<img src="public/screenshot.png" alt="Logo" style="border: 1px solid #ddd; border-radius: 4px;">
+<img src="public/screenshot.png" alt="Git Searcher Screenshot" width="600px">
 
+<br />
+<br />
+<br />
 <br>
 There are two input fields, one search field for the user to type the text and a dropdown where user can either pick "Users", "Repositories" or "Issues" to define the entities that they want to search. 
 
