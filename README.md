@@ -1,30 +1,89 @@
+<br />
+<p align="center">
+    <img src="public/github.png" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">GitHub Searcher</h3>
+
+  <p align="center">
+    This project is using GitHub's public<a href="https://docs.github.com/en/rest/reference/search"> Search API </a> to perform the search for users, repositories and issues.
+    <br />
+    <br />
+    <br />
+    <a href="https://nextjs-snowy-one-63.vercel.app/">View Demo</a>
+    ·
+    <a href="https://github.com/anujverma000/git-searcher/issues">Report Bug</a>
+  </p>
+</p>
+
+
+
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
+
+* [About the Project](#about-the-project)
+  * [Built With](#built-with)
+* [Getting Started](#getting-started)
+  * [Installation](#installation)
+* [Roadmap](#roadmap)
+* [Contact](#contact)
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+<img src="public/screenshot.png" alt="Logo" style="border: 1px solid #ddd; border-radius: 4px;">
+
+<br>
+There are two input fields, one search field for the user to type the text and a dropdown where user can either pick "Users", "Repositories" or "Issues" to define the entities that they want to search. 
+
+
+### Built With
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+* [NextJS](https://nextjs.org/)
+* [Typescript](https://www.typescriptlang.org/)
+* [React](https://reactjs.org/)
+* [Redux](https://redux.js.org/)
+* [Redux-persist](https://github.com/rt2zz/redux-persist)
+
+For Deployment, Using vercel's Github build pipeline
+* [Vercel](https://vercel.com/) 
+
+
+
+<!-- GETTING STARTED -->
 ## Getting Started
 
-First, run the development server:
+To get a local copy up and running follow these simple steps.
+
+### Installation
+
+1. Clone the repo
+```sh
+git clone https://github.com/anujverma000/git-searcher.git
+```
+2. Install NPM packages
+```sh
+npm install
+```
+
+
+3. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<!-- ROADMAP -->
+## Roadmap
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+See the [open issues](https://github.com/anujverma000/git-searcher/issues) for a list of proposed features (and known issues).
 
-## Learn More
+<!-- CONTACT -->
+## Contact
 
-To learn more about Next.js, take a look at the following resources:
+Anuj Verma - [@anujverma000](https://twitter.com/anujverma000) - anujverma000@gmail.com
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Project Link: [https://github.com/anujverma000/git-searcher](https://github.com/anujverma000/git-searcher)
