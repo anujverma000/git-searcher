@@ -5,7 +5,6 @@
 import {
   PseudoBox,
   Flex,
-  Box,
   Link,
   Text,
   Stack,
@@ -30,9 +29,9 @@ const IssueCard: React.FC<Issue> = (issue: Issue) => {
       borderBottomWidth="1px"
       _hover={{ borderColor: "gray.400" }}
     >
-      <Flex mb={2} color="green.400" alignItems="center">
+      <Flex mb={2} color="green.500" alignItems="center">
         <GoGitPullRequest />
-        <Link href={issue.pr_url} isExternal color="gray.400" isTruncated>
+        <Link href={issue.pr_url} isExternal color="gray.500" isTruncated>
           <Text ml={1} fontSize={["sm", "md"]} isTruncated>
             {issue.pr_url}
           </Text>
@@ -50,7 +49,7 @@ const IssueCard: React.FC<Issue> = (issue: Issue) => {
         </Text>
       </Flex>
       <Stack my={4} spacing={4} isInline alignItems="center">
-        <Text fontSize={["sm", "md"]} color="gray.500">
+        <Text fontSize={["md", "sm"]} color="gray.500">
           Updated at {timeAgo.format(Date.parse(issue?.updated_at))}
         </Text>
         <Text
@@ -60,7 +59,7 @@ const IssueCard: React.FC<Issue> = (issue: Issue) => {
         >
           Created: {timeAgo.format(Date.parse(issue?.created_at))}
         </Text>
-        <Flex alignItems="center" fontSize={["sm", "md"]} color="gray.500">
+        <Flex alignItems="center" fontSize={["md", "sm"]} color="gray.500">
           <GoComment />
           &nbsp;{issue.comments || 0} Comments
         </Flex>
