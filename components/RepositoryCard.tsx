@@ -2,7 +2,7 @@
  * Component for rendering resositories from search results
  */
 
-import { Flex, Text, Link, PseudoBox, Box, Stack } from "@chakra-ui/core";
+import { Flex, Text, Link, PseudoBox, Stack } from "@chakra-ui/core";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import { GoRepo, GoStar, GoLaw, GoCode } from "react-icons/go";

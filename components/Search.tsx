@@ -117,11 +117,11 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
         saveSearch(debouncedType, debouncedQuery, parsedResults);
         setLoading(false);
       })
-      .catch((error) => {
+      .catch(() => {
         setLoading(false);
         toast({
           title: "An error occurred.",
-          description: error.message,
+          description: "Internal Server Error",
           position: "top",
           status: "error",
           duration: 10000,
