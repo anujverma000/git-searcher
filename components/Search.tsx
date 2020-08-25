@@ -102,7 +102,9 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
    */
   const handleSearchRequest = () => {
     fetch(
-      `/api/search?t=${encodeURI(debouncedType)}&q=${encodeURI(debouncedQuery)}`
+      `/api/search?t=${encodeURI(debouncedType.trim())}&q=${encodeURI(
+        debouncedQuery.trim()
+      )}`
     )
       .then((res) => {
         if (!res.ok) {
@@ -111,11 +113,24 @@ const Search: React.FC<SearchState> = (searchState: SearchState) => {
         return res.json();
       })
       .then(({ items }) => {
-        /* Get the parsed results, save them in persistent store and set loading off */
-        const parsedResults = parseResults(debouncedType, items);
-        setResults(parsedResults);
-        saveSearch(debouncedType, debouncedQuery, parsedResults);
-        setLoading(false);
+        /* Handle no results */
+        if (items.length === 0) {
+          toast({
+            title: `No '${debouncedType}' Found`,
+            description: `'${debouncedQuery}' does not have any matching results.`,
+            position: "top",
+            status: "warning",
+            duration: 10000,
+            isClosable: true,
+          });
+          setResults([]);
+        } else {
+          /* Get the parsed results, save them in persistent store and set loading off */
+          const parsedResults = parseResults(debouncedType, items);
+          setResults(parsedResults);
+          saveSearch(debouncedType, debouncedQuery, parsedResults);
+          setLoading(false);
+        }
       })
       .catch(() => {
         setLoading(false);

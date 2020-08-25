@@ -11,9 +11,18 @@ import { Octokit } from "@octokit/rest"; // helper lib to manage ajax calls serv
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const octokit = new Octokit({
     auth: process.env.GITHUB_AUTH_TOKEN,
+    log: {
+      debug: console.debug,
+      info: console.info,
+      warn: console.warn,
+      error: console.error,
+    },
   });
+  const type = encodeURI(String(req.query.t).trim());
+  const query = encodeURI(String(req.query.q).trim());
+  console.log(type, query);
   octokit
-    .request(`/search/${req.query.t}?q=${req.query.q}`)
+    .request(`/search/${type.trim()}?q=${query}`)
     .then((result) => res.status(200).json(result.data))
-    .catch(() => res.status(500).send({ message: "Internal Server Error" }));
+    .catch(() => res.status(500).json({ message: "Internal Server Error" }));
 };
