@@ -32,8 +32,9 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-<img src="public/screenshot.png" alt="Git Searcher Screenshot" width="600px">
+<kbd>
+<img src="public/screenshot.png" alt="Git Searcher Screenshot" width="700px">
+</kbd>
 
 <br />
 <br />
